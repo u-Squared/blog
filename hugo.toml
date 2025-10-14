@@ -2,7 +2,9 @@
 baseURL = "https://u-squared.github.io/blog/"
 theme = "hugo-bearcub"
 copyright = "John Doe (CC BY 4.0)"
+languageCode = "en-us"
 defaultContentLanguage = "en"
+title = "u^2 blog"
 
 # Generate a nice robots.txt for SEO
 enableRobotsTXT = true
