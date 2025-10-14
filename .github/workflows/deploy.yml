@@ -1,0 +1,72 @@
+name: Build & Publish Hugo site
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# least-privilege default: read-only for contents
+permissions:
+  contents: read
+  pages: read
+
+concurrency:
+  group: deploy-gh-pages-${{ github.repository }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4  # pin to v4; for max security you can pin to a commit SHA
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Setup Hugo (extended)
+        uses: peaceiris/actions-hugo@v2  # consider pinning to a commit SHA
+        with:
+          hugo-version: '0.110.0'
+          extended: true
+
+      - name: Build site
+        env:
+          HUGO_ENV: production
+        run: hugo --minify
+
+      - name: Upload build artifact for PR preview
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/upload-artifact@v4
+
+  deploy:
+    name: Deploy to gh-pages
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'      # only deploy on direct pushes to main
+    permissions:
+      contents: write    # only this job needs write
+      pages: write
+    steps:
+      - name: Checkout repo (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Deploy to gh-pages
+        # Pin to a specific commit SHA of the action for stronger security:
+        # uses: peaceiris/actions-gh-pages@<commit-sha>
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          user_name: 'github-actions[bot]'
+          user_email: '41898282+github-actions[bot]@users.noreply.github.com'
+

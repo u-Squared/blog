@@ -1,4 +1,4 @@
-baseURL = 'https://gohugo.io/'
+baseURL = 'https://u-Squared.github.io/blog'
 languageCode = 'en-us'
 theme = "hugo-theme-nightfall"
 
