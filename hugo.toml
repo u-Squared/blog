@@ -1,6 +1,6 @@
 baseURL = 'https://u-Squared.github.io/blog'
 languageCode = 'en-us'
-theme = "hugo-theme-nightfall"
+theme = 'nightfall'
 
 [markup]
   [markup.goldmark]
