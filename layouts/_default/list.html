@@ -1,34 +1,26 @@
 {{ define "main" }}
 <section class="posts">
-  {{ $groups := .Pages.GroupByDate "2006" }}
-  {{ if not (len $groups) }}
+  {{ $pages := where .Site.RegularPages "Type" "post" }}
+  {{ if not (len $pages) }}
     <p>No posts found.</p>
   {{ end }}
 
-  {{ range $groups }}
-    <h2 class="year">{{ .Key }}</h2>
-    <ul class="posts-year">
-      {{ $pages := .Pages.ByDate }} {{/* sort pages by date (ascending) */}}
-      {{ range $pages.Reverse }} {{/* iterate newest-first */}}
-        <li class="post-item">
-          {{ $d := .Date }}
-          <time datetime="{{ $d.Format "2006-01-02T15:04:05Z07:00" }}">{{ $d.Format "Jan 2" }}</time>
-          <a href="{{ .RelPermalink }}">
-            {{ if .LinkTitle }}{{ .LinkTitle }}{{ else }}{{ .Title }}{{ end }}
-          </a>
-
-          {{ with .Summary }}
-            <p class="summary">{{ . }}</p>
-          {{ end }}
-
-          {{ with .Params.tags }}
-            <p class="tags">
-              {{ range . }}<span class="tag">#{{ . }}</span> {{ end }}
-            </p>
-          {{ end }}
-        </li>
+  <ul class="posts-year">
+  {{ range $p := $pages.ByDate.Reverse }}
+    <li class="post-item">
+      {{ $d := $p.Date }}
+      <time datetime="{{ $d.Format "2006-01-02T15:04:05Z07:00" }}">{{ $d.Format "Jan 2, 2006" }}</time>
+      <a href="{{ $p.RelPermalink }}">
+        {{ if $p.LinkTitle }}{{ $p.LinkTitle }}{{ else }}{{ $p.Title }}{{ end }}
+      </a>
+      {{ with $p.Summary }}<p class="summary">{{ . }}</p>{{ end }}
+      {{ with $p.Params.tags }}
+        <p class="tags">
+          {{ range . }}<span class="tag">#{{ . }}</span> {{ end }}
+        </p>
       {{ end }}
-    </ul>
+    </li>
   {{ end }}
+  </ul>
 </section>
 {{ end }}
