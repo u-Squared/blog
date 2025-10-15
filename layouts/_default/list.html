@@ -16,10 +16,14 @@
           <a href="{{ .RelPermalink }}">
             {{ if .LinkTitle }}{{ .LinkTitle }}{{ else }}{{ .Title }}{{ end }}
           </a>
-          {{ with .Summary }}<p class="summary">{{ . }}</p>{{ end }}
+
+          {{ with .Summary }}
+            <p class="summary">{{ . }}</p>
+          {{ end }}
+
           {{ with .Params.tags }}
             <p class="tags">
-              {{ range $i, $t := . }}<span class="tag">#{{ $t }}</span>{{ if lt (add $i 1) (len $. ) }} {{ end }}{{ end }}
+              {{ range . }}<span class="tag">#{{ . }}</span> {{ end }}
             </p>
           {{ end }}
         </li>
