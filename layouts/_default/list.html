@@ -1,25 +1,31 @@
 {{ define "main" }}
-  <!-- List of all pages -->
-  <div class="centered list">
-    {{ range .Pages.GroupByDate "2006" }}
-        <div class="element">
-            <h3>{{ .Key }}</h3>
-            {{ range .Pages }}
-            <div class="post-archive">
-                <div class="left">
-                    {{ if .Summary }}
-                    <time datetime="{{ .PublishDate }}">{{ .PublishDate.Format "Jan 2" }}</time>
-                    {{ end }}
-                    <h4><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h4>
-                </div>
-                <div class="tags">
-                    {{ range .Params.tags }}
-                        <a href="/tags/{{.}}">#{{ . }}</a>
-                    {{ end }}
-                </div>
-            </div>
-            {{ end }}
-        </div>
+  <section class="posts">
+    {{ $groups := .Pages.GroupByDate "2006" | reverse }} {{/* newest year first */}}
+    {{ if not (len $groups) }}
+      <p>No posts found.</p>
     {{ end }}
-  </div>
+    {{ range $groups }}
+      {{ $year := .Key }}
+      <h2 class="year">{{ $year }}</h2>
+
+      <ul class="posts-year">
+      {{ $pages := .Pages.ByDate.Reverse }} {{/* newest posts first */}}
+      {{ range $pages }}
+        {{ $date := cond .PublishDate.IsZero .Date .PublishDate }} {{/* fallback: use PublishDate if set else Date */}}
+        <li class="post-item">
+          <time datetime="{{ $date.Format "2006-01-02T15:04:05Z07:00" }}">
+            {{ $date.Format "Jan 2" }}
+          </time>
+          <a href="{{ .RelPermalink }}">{{ if .LinkTitle }}{{ .LinkTitle }}{{ else }}{{ .Title }}{{ end }}</a>
+          {{ with .Summary }}<p class="summary">{{ . }}</p>{{ end }}
+          {{ with .Params.tags }}
+            <p class="tags">
+              {{ range $i, $t := . }}<span class="tag">#{{ $t }}</span>{{ if lt (add $i 1) (len $.Params.tags) }} {{ end }}{{ end }}
+            </p>
+          {{ end }}
+        </li>
+      {{ end }}
+      </ul>
+    {{ end }}
+  </section>
 {{ end }}
