@@ -14,7 +14,7 @@
     <meta property="og:description" content="{{ .Site.Params.Description }}" />
     <meta name="description" content="{{ .Site.Params.Description }}" />
 {{ end }} 
-<link rel="shortcut icon" href="{{ "../images/favicon.ico" | relURL }}" type="image/x-icon" /> 
+<link rel="shortcut icon" href="{{ "images/favicon.ico" | relURL }}" type="image/x-icon" />
 {{ partialCached "head/css.html" . }}
 {{ if .OutputFormats.Get "RSS" }}
     {{ with .OutputFormats.Get "RSS" }}
