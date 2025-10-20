@@ -1,0 +1,296 @@
+/* ==========================================================================
+   main.css
+   - Single-file, easy-to-edit stylesheet inspired by Nightfall
+   - Place this at: static/css/main.css
+   - Fonts: expect them at static/fonts/ (paths below are relative to css/)
+   ========================================================================== */
+
+/* ------------------------------
+   :root - theme variables
+   ------------------------------ */
+
+:root{
+  /* --- Nightfall-inspired: blue variant --- */
+  --background: #0b1116;               /* deep page background */
+  --background-darker: #090b0f;        /* used for cards/stripes */
+  --background-lighter: #131827;       /* codeblock / highlights */
+  --background-even-lighter: #1d2533;  /* subtle contrast (line highlights) */
+
+  --primary: #2ea3ff;                  /* bright blue accent (links, highlights) */
+  --primary-darker: #1d6fb0;
+  --primary-dark: #102232;
+
+  --secondary: #29ffff;                /* cyan secondary accents */
+  --secondary-transparent: #29ffff09;
+
+  --spacing: 1rem;
+
+  --text: #d7dde6;                     /* main body text (soft light) */
+  --text-secondary: #9aa3b3;           /* muted metadata text */
+
+  --warning: #e0de71;
+  --warning-dark: #3e3d1a;
+
+  --info: #027aff;
+  --info-dark: #00102e;
+
+  --tip: #53dfdd;
+  --tip-dark: #082726;
+
+  /* derived helpers */
+  --card-bg: rgba(255,255,255,0.02);
+  --border: rgba(255,255,255,0.06);
+}
+
+
+/* ------------------------------
+   FONT-FACE
+   ------------------------------
+   - Keep fonts in `static/fonts/`
+   - CSS file is in `static/css/`, so fonts referenced with ../fonts/...
+*/
+@font-face {
+  font-family: "FiraMono";
+  font-style: italic;
+  font-weight: 400;
+  src: local(""),
+    url("../fonts/FiraMono-Medium.woff2") format("woff2"),
+    url("../fonts/FiraMono-Medium.woff") format("woff");
+  font-display: swap;
+}
+
+/* Fallback font-face or additional faces could be declared here */
+
+/* ------------------------------
+   Reset / base
+   ------------------------------ */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  font-family: "FiraMono", monospace;
+  font-size: 11pt;
+  line-height: 1.45;
+  background-image:
+    radial-gradient(var(--secondary-transparent) 20%, transparent 20%),
+    radial-gradient(var(--secondary-transparent) 20%, transparent 20%);
+  background-position: 0 0, 50px 50px;
+  background-size: 10px 14px;
+  background-color: var(--background);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Global link defaults (easy to edit) */
+a { color: var(--primary); text-decoration: underline; cursor: pointer; }
+a:hover { color: var(--primary-darker); }
+
+/* Generic container utilities */
+.container { width: 100%; margin-left: auto; margin-right: auto; padding: 0 1rem; }
+.centered { margin-left: auto; margin-right: auto; max-width: 40vw; }
+
+/* Main wrapper */
+main { width: 100%; margin: 0 auto; flex: 1 0 auto; padding: 1.25rem 0; }
+
+/* ------------------------------
+   NAVIGATION
+   - horizontal nav with pill-like items
+   ------------------------------ */
+nav:not(#TableOfContents) ul {
+  list-style: none;
+  margin: var(--spacing) 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+nav:not(#TableOfContents) ul li {
+  margin: 0;
+  border: 1px solid var(--primary);
+  border-left: 0;
+  background-color: var(--background);
+  position: relative;
+}
+
+nav:not(#TableOfContents) ul li:first-child { border-left: 1px solid var(--primary); }
+
+nav:not(#TableOfContents) ul li a {
+  display: block;
+  padding: calc(var(--spacing)/2) calc(var(--spacing)*1.5);
+  color: var(--text);
+  text-decoration: none;
+}
+
+nav:not(#TableOfContents) ul li:hover {
+  background-color: var(--primary-dark);
+  color: var(--primary);
+}
+
+/* ------------------------------
+   BIO / PROFILE block
+   - avatar, short bio; responsive
+   ------------------------------ */
+.bio-container { display: flex; justify-content: center; width: 100%; padding: 0 var(--spacing); }
+.bio {
+  position: relative;
+  background-color: var(--primary-dark);
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--primary);
+  padding: calc(var(--spacing) / 2);
+  gap: var(--spacing);
+  max-width: 40rem;
+  width: 100%;
+}
+
+.bio .avatar {
+  height: 10rem;
+  width: auto;
+  display: block;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.bio .content { display: flex; flex-direction: column; justify-content: center; }
+.bio .content h5 { margin: 0; color: var(--text-secondary); }
+
+/* ------------------------------
+   PAGINATION
+   ------------------------------ */
+.pagination { margin-top: calc(var(--spacing) * 2); height: calc(var(--spacing)*2); }
+.pagination a {
+  padding: calc(var(--spacing)/2);
+  border: 1px solid var(--primary);
+  color: var(--text);
+  text-decoration: none;
+}
+.pagination a.older { float: right; }
+
+/* ------------------------------
+   HOME / LIST views (archive)
+   ------------------------------ */
+.home .article .heading { margin-top: calc(var(--spacing)*2); margin-bottom: calc(var(--spacing)/2); display:flex; justify-content:space-between; align-items:flex-start; }
+.home .article .heading h3 { margin: 0; }
+.home .article .heading time { color: var(--text-secondary); min-width: fit-content; }
+
+/* Archive list entry */
+.list .post-archive {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: var(--spacing) 0;
+  gap: var(--spacing);
+}
+.list .post-archive .left { display:flex; align-items:flex-start; gap: calc(var(--spacing)/2); }
+.list .post-archive time { color: var(--text-secondary); min-width: calc(var(--spacing)*3.5); }
+.list .post-archive h4 { margin: 0; margin-left: var(--spacing); }
+.list .post-archive .tags a { color: var(--text-secondary); padding: calc(var(--spacing)/4); text-decoration:none; }
+
+/* ------------------------------
+   POST (single) styles
+   ------------------------------ */
+.post > ul { list-style: none; display:flex; justify-content: space-around; gap:1rem; padding:0; margin:0; align-items:center; }
+.post > h1 { text-align: center; margin: 0.5rem 0; }
+
+.post hr { border: 0; border-top: 1px solid var(--background-lighter); margin: 1rem 0; }
+
+/* Markdown content area */
+.post .content {
+  color: var(--text);
+  background: transparent;
+  padding: 0;
+}
+
+/* Images and media in post content */
+.post .content img { display:block; max-width:100%; height:auto; margin: 0.5rem 0; border-radius: 4px; }
+
+/* Code blocks */
+.post .content .codeblock,
+.post .content code,
+.post .content pre {
+  background-color: var(--background-lighter);
+  font-family: "FiraMono", monospace;
+  font-size: 0.9rem;
+  border-radius: 4px;
+}
+
+.post .content .codeblock { padding: calc(var(--spacing)/4); display: block; max-width: fit-content; }
+.post .content pre { margin: 0; padding: calc(var(--spacing)/4) calc(var(--spacing)/2); overflow:auto; }
+
+/* Highlight wrapper fixes (force consistent background) */
+.post .content .highlight { padding: 0.25rem; background-color: var(--background-lighter); overflow-x:auto; }
+.post .content .highlight * { background-color: var(--background-lighter) !important; }
+.post .content .highlight span[style*="background-color"] { background-color: var(--background-even-lighter) !important; }
+
+/* Callouts / blockquotes */
+.post .content #callout, .post .content blockquote {
+  margin: var(--spacing) 0;
+  padding: var(--spacing);
+  background-color: var(--background);
+  border: 2px solid var(--text-secondary);
+  border-left: 7px solid var(--text-secondary);
+}
+
+/* Colored callouts */
+.post .content #callout.Tip { background-color: var(--tip-dark); border-color: var(--tip); color: var(--tip); }
+.post .content #callout.Warning { background-color: var(--warning-dark); border-color: var(--warning); color: var(--warning); }
+.post .content #callout.Danger { background-color: var(--primary-dark); border-color: var(--primary); color: var(--primary); }
+.post .content #callout.Info { background-color: var(--info-dark); border-color: var(--info); color: var(--info); }
+
+/* Tables */
+.post .content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--spacing) 0;
+}
+.post .content table td,
+.post .content table th {
+  padding: calc(var(--spacing)/2);
+  border: 1px solid var(--text-secondary);
+}
+.post .content table tbody tr:nth-child(even) { background-color: var(--background-darker); }
+.post .content table tbody tr:nth-child(odd)  { background-color: var(--background-lighter); }
+
+/* ------------------------------
+   FOOTER
+   ------------------------------ */
+footer { text-align:center; padding: var(--spacing); color: var(--text-secondary); border-top: 1px solid var(--border); }
+
+/* ------------------------------
+   Utility / small helpers
+   ------------------------------ */
+.time { color: var(--text-secondary); font-size: 0.95em; }
+.summary { color: var(--text-secondary); margin: 0.4rem 0; }
+
+/* ------------------------------
+   Accessibility / mobile tweaks
+   ------------------------------ */
+/* Fix for mobile iOS font-size scaling in code blocks */
+code { -webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; -ms-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+/* ------------------------------
+   Responsive
+   ------------------------------ */
+@media (max-width: 1600px) {
+  .centered { max-width: 90vw; }
+}
+
+@media (max-width: 600px) {
+  .list .post-archive { flex-direction: column; gap: var(--spacing); }
+  .list .post-archive .left { flex-direction: column; align-items:flex-start; }
+  .bio .avatar { height: 7rem; }
+}
+
+/* ------------------------------
+   End of main.css
+   - Customize: edit variables at :root
+   - To make it more Nightfall-like: tweak --primary, --secondary, font choices
+   ------------------------------ */
+
